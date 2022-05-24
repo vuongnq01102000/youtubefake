@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:youtubefake/core/injection.dart';
 import 'package:youtubefake/models/channel_model.dart';
+import 'package:youtubefake/models/item_model.dart';
 import 'package:youtubefake/respository/channel_info_respository.dart';
+import 'package:youtubefake/respository/playlist_items_repository.dart';
+import 'package:youtubefake/respository/video_categories_repository.dart';
 import 'package:youtubefake/utils/list_data_fake.dart';
 import 'package:youtubefake/widget/home_widgets/body_widgets/button_list_tile_widget.dart';
 import 'package:youtubefake/widget/home_widgets/body_widgets/card_review_thumbnail_widget.dart';
@@ -24,15 +28,32 @@ class _BodyHomePageState extends State<BodyHomePage> {
   bool isMore = false;
   bool isMoreChannel = false;
   bool isloading = true;
+  bool isContentLoading = true;
   ScrollController scrollController = ScrollController();
   ScrollController gridController = ScrollController();
   double point = 0;
   List<ChannelModel> listChannel = [];
+  List<ItemModel> listItemPlaylist = [];
+  List<ItemModel> listVideoCategories = [];
+  List<ItemModel> listPlayLists = [];
+  YoutubePlayerController youtubePlayerController = YoutubePlayerController(
+    initialVideoId: 'idLccry219k',
+    params: const YoutubePlayerParams(
+      startAt: Duration(minutes: 1, seconds: 36),
+      showControls: true,
+      showFullscreenButton: true,
+      desktopMode: false,
+      privacyEnhanced: true,
+      useHybridComposition: true,
+    ),
+  );
   @override
   void initState() {
     scrollController.addListener(() {});
-
+    _getVideoCategories();
+    _getPlaylistVideo();
     _getInfoChannel();
+    _getListPlayList();
     super.initState();
   }
 
@@ -61,7 +82,7 @@ class _BodyHomePageState extends State<BodyHomePage> {
               flex: 1,
               child: ChoiceChipCategoryHomePage(
                   scrollController: scrollController,
-                  list: listCategoryChip,
+                  list: listVideoCategories,
                   funcDeres: () {
                     point = point - 50;
                     scrollController.animateTo(point,
@@ -83,23 +104,69 @@ class _BodyHomePageState extends State<BodyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height,
-                  child: GridView.builder(
-                    controller: gridController,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 1.25,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                            crossAxisCount: 3),
-                    itemBuilder: (ctx, i) {
-                      return CardReviewVideo(
-                          title: listCardThumbnailModel[i].title,
-                          subtitle: listCardThumbnailModel[i].subtitle,
-                          avtPath: listCardThumbnailModel[i].avtPath ?? '',
-                          imgPath: listCardThumbnailModel[i].imgPath);
-                    },
-                    itemCount: listCardThumbnailModel.length,
-                  ),
+                  child: isContentLoading
+                      ? const CircularProgressIndicator()
+                      : GridView.builder(
+                          controller: gridController,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  childAspectRatio: 1.25,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20,
+                                  crossAxisCount: 3),
+                          itemBuilder: (ctx, i) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (ctx) {
+                                  return YoutubePlayerIFrame(
+                                    controller: youtubePlayerController,
+                                  );
+                                  // YoutubeValueBuilder(
+                                  //     controller: youtubePlayerController,
+                                  //     builder: (ctx, value) {
+                                  //       return IconButton(
+                                  //           icon: Icon(
+                                  //             value.playerState ==
+                                  //                     PlayerState.playing
+                                  //                 ? Icons.pause
+                                  //                 : Icons.play_arrow,
+                                  //           ),
+                                  //           onPressed: value.isReady
+                                  //               ? () {
+                                  //                   value.playerState ==
+                                  //                           PlayerState.playing
+                                  //                       ? context.ytController
+                                  //                           .pause()
+                                  //                       : context.ytController
+                                  //                           .play();
+                                  //                 }
+                                  //               : null);
+                                  //     });
+                                }));
+                              },
+                              child: CardReviewVideo(
+                                  title:
+                                      listItemPlaylist[i].snippet.title ?? '',
+                                  subtitle:
+                                      listItemPlaylist[i].snippet.description ??
+                                          '',
+                                  avtPath: listItemPlaylist[i]
+                                          .snippet
+                                          .thumbnails!
+                                          .medium
+                                          ?.url ??
+                                      '',
+                                  imgPath: listItemPlaylist[i]
+                                          .snippet
+                                          .thumbnails!
+                                          .high
+                                          ?.url ??
+                                      ''),
+                            );
+                          },
+                          itemCount: listItemPlaylist.length,
+                        ),
                 ),
               ),
             ),
@@ -154,11 +221,27 @@ class _BodyHomePageState extends State<BodyHomePage> {
                       if (isMore)
                         Column(
                           children: List.generate(
-                              listPlaylist.length,
-                              (i) => ButtonListTileHomePage(
-                                  icon: listPlaylist[i].icon!,
-                                  title: listPlaylist[i].title!,
-                                  func: () {})),
+                              listPlayLists.length,
+                              (i) => ListTile(
+                                    leading: CircleAvatar(
+                                      maxRadius: 20,
+                                      minRadius: 10,
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                              listPlayLists[i]
+                                                      .snippet
+                                                      .thumbnails!
+                                                      .medium
+                                                      ?.url ??
+                                                  ''),
+                                    ),
+                                    title: Text(
+                                      listPlayLists[i].snippet.title ?? '',
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  )),
                         ),
                       ListTile(
                         leading: Icon(isMore
@@ -212,13 +295,14 @@ class _BodyHomePageState extends State<BodyHomePage> {
                                               listChannel[i]
                                                   .items[i]
                                                   .snippet
-                                                  .thumbnails
+                                                  .thumbnails!
                                                   .medium!
                                                   .url),
                                           title: listChannel[i]
-                                              .items[i]
-                                              .snippet
-                                              .title,
+                                                  .items[i]
+                                                  .snippet
+                                                  .title ??
+                                              '',
                                           func: () {})),
                                 )
                           : isloading
@@ -228,15 +312,17 @@ class _BodyHomePageState extends State<BodyHomePage> {
                                       listChannel.length,
                                       (i) => ChannelSub(
                                           image: NetworkImage(listChannel[i]
-                                              .items[i]
-                                              .snippet
-                                              .thumbnails
-                                              .high!
-                                              .url),
+                                                  .items[i]
+                                                  .snippet
+                                                  .thumbnails!
+                                                  .high
+                                                  ?.url ??
+                                              ''),
                                           title: listChannel[i]
-                                              .items[i]
-                                              .snippet
-                                              .title,
+                                                  .items[i]
+                                                  .snippet
+                                                  .title ??
+                                              '',
                                           func: () {})),
                                 ),
                       if (listChannel.length > 4)
@@ -323,5 +409,33 @@ class _BodyHomePageState extends State<BodyHomePage> {
       isloading = false;
     });
     listChannel.add(channelInfoList);
+  }
+
+  _getPlaylistVideo() async {
+    var playListVideo =
+        await Injection.get<PlaylistItemsRepository>().getPlaylistItems();
+    setState(() {
+      isContentLoading = false;
+      listItemPlaylist.clear();
+      listItemPlaylist.addAll(playListVideo.items);
+    });
+  }
+
+  _getVideoCategories() async {
+    var videoCategories =
+        await Injection.get<VideoCategoriesRepository>().getVideoCategories();
+    setState(() {
+      listVideoCategories.clear();
+      listVideoCategories.addAll(videoCategories.items);
+    });
+  }
+
+  _getListPlayList() async {
+    var listPlaylist =
+        await Injection.get<PlaylistItemsRepository>().getListPlaylist();
+    setState(() {
+      listPlayLists.clear();
+      listPlayLists.addAll(listPlaylist.items);
+    });
   }
 }

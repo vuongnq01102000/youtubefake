@@ -15,8 +15,7 @@ class ChannelInfoRepositoryImp implements ChannelInfoRepository {
       'key': API_KEY,
     };
     var respone = await Dio().get(GET_CHANNELS_INFO, queryParameters: param);
-    print(respone);
-    // if (respone == null) return null;
+
     return ChannelModel.fromJson(respone.data);
   }
 }

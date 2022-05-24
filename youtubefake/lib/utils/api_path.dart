@@ -1,8 +1,12 @@
 const String API_KEY = "AIzaSyCtAO8Dcpn0c5JG-FLibAYhlbTKRVUJee4";
 const String CHANNEL_KEY = "UCfgJzmgw066fHvDCV_R9WaA";
+const String PLAYLIST_KEY = "RDCLAK5uy_lBGRuQnsG37Akr1CY4SxL0VWFbPrbO4gs";
 const String URL = "https://youtube.googleapis.com";
 
+const String GET_PLAYLIST_VIDEO = '$URL/youtube/v3/playlistItems';
 const String GET_CHANNELS_INFO = '$URL/youtube/v3/channels';
+const String GET_VIDEO_CATEGORIES = '$URL/youtube/v3/videoCategories';
+const String GET_LIST_PLAYLIST = '$URL/youtube/v3/playlists';
 //=================================================================================
 const String IMG1 =
     "https://progameguides.com/wp-content/uploads/2021/01/Genshin-Impact-Character-Albedo-450x450.jpg";

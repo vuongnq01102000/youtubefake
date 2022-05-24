@@ -26,6 +26,7 @@ class CardReviewVideo extends StatelessWidget {
       width: 300,
       height: 300,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             height: 200,
@@ -37,23 +38,27 @@ class CardReviewVideo extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.blue,
-              backgroundImage: NetworkImage(avtPath),
-            ),
-            title: Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            subtitle: Text(
-              subtitle,
-              textAlign: TextAlign.start,
-              style: const TextStyle(),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.blue,
+                backgroundImage: NetworkImage(avtPath),
+              ),
+              title: Text(
+                title,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(
+                subtitle,
+                textAlign: TextAlign.start,
+                style: const TextStyle(fontSize: 12),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         ],

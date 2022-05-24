@@ -8,20 +8,24 @@ part 'snippet_model.g.dart';
 @JsonSerializable()
 class SnippetModel {
   SnippetModel({
-    required this.title,
-    required this.description,
-    required this.publishedAt,
+    this.title,
+    this.description,
+    this.publishedAt,
+    this.assignable = false,
+    this.channelId,
     required this.thumbnails,
-    required this.localized,
-    required this.country,
+    this.localized,
+    this.country = 'vn',
   });
 
-  String title;
-  String description;
-  DateTime publishedAt;
-  ThumbnailsModel thumbnails;
-  LocalizedModel localized;
-  String country;
+  String? title;
+  String? description;
+  String? channelId;
+  DateTime? publishedAt;
+  bool? assignable;
+  ThumbnailsModel? thumbnails;
+  LocalizedModel? localized;
+  String? country;
 
   factory SnippetModel.fromJson(Map<String, dynamic> json) =>
       _$SnippetModelFromJson(json);

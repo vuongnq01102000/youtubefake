@@ -17,12 +17,12 @@ class ItemModel {
     required this.statistics,
   });
 
-  String kind;
-  String etag;
-  String id;
+  String? kind;
+  String? etag;
+  String? id;
   SnippetModel snippet;
-  ContentDetails contentDetails;
-  StatisticsModel statistics;
+  ContentDetails? contentDetails;
+  StatisticsModel? statistics;
 
   factory ItemModel.fromJson(Map<String, dynamic> json) =>
       _$ItemModelFromJson(json);

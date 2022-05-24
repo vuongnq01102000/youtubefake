@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:youtubefake/models/item_model.dart';
 
 class ChoiceChipCategoryHomePage extends StatelessWidget {
   final Function funcDeres;
   final Function funcIncre;
   final ScrollController scrollController;
-  final List<String> list;
+  final List<ItemModel> list;
   const ChoiceChipCategoryHomePage({
     Key? key,
     required this.scrollController,
@@ -32,10 +33,11 @@ class ChoiceChipCategoryHomePage extends StatelessWidget {
                       (index) => Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: Chip(
-                                backgroundColor: list[index] == 'All'
+                                backgroundColor: list[index] == list.first
                                     ? Colors.black45
                                     : Colors.black12,
-                                label: Text(list[index])),
+                                label:
+                                    Text(list[index].snippet.title ?? 'Title')),
                           )),
                 ),
               ),

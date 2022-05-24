@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../models/button_list_tile_model.dart';
 import 'package:youtubefake/models/button_list_tile_model.dart';
-import 'package:youtubefake/models/card_thumbnail_model.dart';
 import 'package:youtubefake/models/channel_sub_model.dart';
 import 'package:youtubefake/utils/api_path.dart';
 
@@ -88,6 +89,7 @@ List<ButtonListTileModel> listButtonServices1 = <ButtonListTileModel>[
     title: 'Sports',
   ),
 ];
+
 List<ButtonListTileModel> listButtonServices2 = <ButtonListTileModel>[
   ButtonListTileModel(
     icon: Icons.settings_outlined,
@@ -106,32 +108,32 @@ List<ButtonListTileModel> listButtonServices2 = <ButtonListTileModel>[
     title: 'Report',
   ),
 ];
-List<ButtonListTileModel> listPlaylist = <ButtonListTileModel>[
-  ButtonListTileModel(
-    icon: Icons.playlist_play,
-    title: 'Playlist 1',
-  ),
-  ButtonListTileModel(
-    icon: Icons.playlist_play,
-    title: 'Playlist 2',
-  ),
-  ButtonListTileModel(
-    icon: Icons.playlist_play,
-    title: 'Playlist 3',
-  ),
-  ButtonListTileModel(
-    icon: Icons.playlist_play,
-    title: 'Playlist 4',
-  ),
-  ButtonListTileModel(
-    icon: Icons.playlist_play,
-    title: 'Playlist 5',
-  ),
-  ButtonListTileModel(
-    icon: Icons.playlist_play,
-    title: 'Playlist 6',
-  ),
-];
+// List<ButtonListTileModel> listPlaylist = <ButtonListTileModel>[
+//   ButtonListTileModel(
+//     icon: Icons.playlist_play,
+//     title: 'Playlist 1',
+//   ),
+//   ButtonListTileModel(
+//     icon: Icons.playlist_play,
+//     title: 'Playlist 2',
+//   ),
+//   ButtonListTileModel(
+//     icon: Icons.playlist_play,
+//     title: 'Playlist 3',
+//   ),
+//   ButtonListTileModel(
+//     icon: Icons.playlist_play,
+//     title: 'Playlist 4',
+//   ),
+//   ButtonListTileModel(
+//     icon: Icons.playlist_play,
+//     title: 'Playlist 5',
+//   ),
+//   ButtonListTileModel(
+//     icon: Icons.playlist_play,
+//     title: 'Playlist 6',
+//   ),
+// ];
 
 List<String> listTextTitle = <String>[
   "Introduce",
@@ -146,57 +148,4 @@ List<String> listTextTitle = <String>[
   "Policy & Safety",
   "How YouTube works",
   "Test new features",
-];
-List<String> listCategoryChip = <String>[
-  "All",
-  "Music",
-  "Gaming",
-  "Youth Music",
-  "Lo-fi",
-  "Esport",
-  "Futsal",
-  "Football",
-  "Humans",
-  "Live",
-  "Flutter Tips",
-  "How To Fix Bugs",
-  "Welcome to VIET NAM",
-];
-
-List<CardThumnailsModel> listCardThumbnailModel = <CardThumnailsModel>[
-  CardThumnailsModel(
-      'Video 1',
-      'Day la cai subtitle cho moi nguoi mo ta ngan ve video',
-      IMG1,
-      THUMBNAIL1),
-  CardThumnailsModel(
-      'Video 2',
-      'Day la cai subtitle cho moi nguoi mo ta ngan ve video',
-      IMG2,
-      THUMBNAIL2),
-  CardThumnailsModel(
-      'Video 3',
-      'Day la cai subtitle cho moi nguoi mo ta ngan ve video',
-      IMG3,
-      THUMBNAIL3),
-  CardThumnailsModel(
-      'Video 4',
-      'Day la cai subtitle cho moi nguoi mo ta ngan ve video',
-      IMG4,
-      THUMBNAIL4),
-  CardThumnailsModel(
-      'Video 5',
-      'Day la cai subtitle cho moi nguoi mo ta ngan ve video',
-      IMG5,
-      THUMBNAIL5),
-  CardThumnailsModel(
-      'Video 6',
-      'Day la cai subtitle cho moi nguoi mo ta ngan ve video',
-      IMG6,
-      THUMBNAIL6),
-  CardThumnailsModel(
-      'Video 7',
-      'Day la cai subtitle cho moi nguoi mo ta ngan ve video',
-      IMG7,
-      THUMBNAIL7),
 ];
