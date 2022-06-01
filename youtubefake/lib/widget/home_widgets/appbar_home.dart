@@ -27,7 +27,9 @@ class AppBarHome extends StatelessWidget {
                   child: SizedBox(
                       height: 40,
                       child: IconButton(
-                          onPressed: () => func(),
+                          onPressed: () {
+                            func.call();
+                          },
                           icon: const Icon(Icons.menu))),
                 ),
                 Expanded(
