@@ -7,6 +7,7 @@ import 'package:youtubefake/page/details/details_page.dart';
 import 'package:youtubefake/respository/channel_info_respository.dart';
 import 'package:youtubefake/respository/playlist_items_repository.dart';
 import 'package:youtubefake/respository/video_categories_repository.dart';
+import 'package:youtubefake/utils/api_path.dart';
 import 'package:youtubefake/utils/list_data_fake.dart';
 import 'package:youtubefake/widget/home_widgets/body_widgets/button_list_tile_widget.dart';
 import 'package:youtubefake/widget/home_widgets/body_widgets/card_review_thumbnail_widget.dart';
@@ -42,7 +43,7 @@ class _BodyHomePageState extends State<BodyHomePage> {
     scrollController.addListener(() {});
     _getVideoCategories();
     _getPlaylistVideo();
-    _getInfoChannel();
+
     _getListPlayList();
     super.initState();
   }
@@ -255,42 +256,53 @@ class _BodyHomePageState extends State<BodyHomePage> {
                           ? isloading
                               ? const CircularProgressIndicator()
                               : Column(
-                                  children: List.generate(
-                                      listChannel.length,
-                                      (i) => ChannelSub(
+                                  children: List.generate(4, (index) {
+                                    for (var i = 0;
+                                        i <= listChannel[index].items.length;
+                                        i++) {
+                                      return ChannelSub(
                                           image: CachedNetworkImageProvider(
-                                              listChannel[i]
+                                              listChannel[index]
                                                   .items[i]
                                                   .snippet
                                                   .thumbnails!
                                                   .medium!
                                                   .url),
-                                          title: listChannel[i]
+                                          title: listChannel[index]
                                                   .items[i]
                                                   .snippet
                                                   .title ??
                                               '',
-                                          func: () {})),
+                                          func: () {});
+                                    }
+                                    return Container();
+                                  }),
                                 )
                           : isloading
                               ? const CircularProgressIndicator()
                               : Column(
-                                  children: List.generate(
-                                      listChannel.length,
-                                      (i) => ChannelSub(
-                                          image: NetworkImage(listChannel[i]
+                                  children: List.generate(listChannel.length,
+                                      (index) {
+                                    for (var i = 0;
+                                        i <= listChannel[index].items.length;
+                                        i++) {
+                                      return ChannelSub(
+                                          image: CachedNetworkImageProvider(
+                                              listChannel[index]
                                                   .items[i]
                                                   .snippet
                                                   .thumbnails!
-                                                  .high
-                                                  ?.url ??
-                                              ''),
-                                          title: listChannel[i]
+                                                  .medium!
+                                                  .url),
+                                          title: listChannel[index]
                                                   .items[i]
                                                   .snippet
                                                   .title ??
                                               '',
-                                          func: () {})),
+                                          func: () {});
+                                    }
+                                    return Container();
+                                  }),
                                 ),
                       if (listChannel.length > 4)
                         ListTile(
@@ -369,20 +381,19 @@ class _BodyHomePageState extends State<BodyHomePage> {
         ));
   }
 
-  _getInfoChannel() async {
-    var channelInfoList =
-        await Injection.get<ChannelInfoRepository>().getChannelInfo();
-    setState(() {
-      isloading = false;
-    });
-    listChannel.add(channelInfoList);
-  }
-
   _getPlaylistVideo() async {
     var playListVideo =
         await Injection.get<PlaylistItemsRepository>().getPlaylistItems();
+    for (var i = 0; i < playListVideo.items.length; i++) {
+      var channelInfoList = await Injection.get<ChannelInfoRepository>()
+          .getChannelInfo(
+              playListVideo.items[i].snippet.channelId ?? CHANNEL_KEY);
+      listChannel.add(channelInfoList);
+      print(channelInfoList);
+    }
     setState(() {
       isContentLoading = false;
+      isloading = false;
       listItemPlaylist.clear();
       listItemPlaylist.addAll(playListVideo.items);
     });

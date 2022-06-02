@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:youtubefake/core/injection.dart';
 import 'package:youtubefake/models/item_model.dart';
+import 'package:youtubefake/respository/channel_info_respository.dart';
 
 class RightRowDetailsPage extends StatelessWidget {
-  const RightRowDetailsPage({
+  RightRowDetailsPage({
     Key? key,
     required this.listItemPlaylist,
   }) : super(key: key);
 
   final List<ItemModel> listItemPlaylist;
+  String name = '';
+  Future<String> _getNameChannel(String channelKey) async {
+    var res =
+        await Injection.get<ChannelInfoRepository>().getChannelInfo(channelKey);
+
+    for (var i = 0; i < res.items.length; i++) {
+      name = res.items[i].snippet.title!;
+    }
+    return name.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +58,7 @@ class RightRowDetailsPage extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      listItemPlaylist[i].snippet.country ?? '',
+                      listItemPlaylist[i].statistics?.viewCount ?? '',
                       textAlign: TextAlign.start,
                       style: const TextStyle(fontSize: 13),
                       maxLines: 2,
@@ -56,7 +68,7 @@ class RightRowDetailsPage extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      listItemPlaylist[i].snippet.channelId ?? '',
+                      ' ${_getNameChannel(listItemPlaylist[i].snippet.channelId!)}',
                       textAlign: TextAlign.start,
                       style: const TextStyle(fontSize: 13),
                       maxLines: 2,
